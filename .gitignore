@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# build outputs
+dist/
+.vite/
+
+# local environment / secrets
+.env
+*.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
