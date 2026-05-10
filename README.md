@@ -6,7 +6,7 @@ It focuses on fast first-person riding, readable low-cost 3D visuals, grip-risk 
 
 ## How it was created
 
-This project was created through an AI-assisted iterative coding workflow with Adrian Hensler and Dash, using the pi coding-agent environment. It began as a single-file Three.js browser prototype, then was refactored into a modular Vite project with separate systems for rendering, input, tracks, vehicle physics, cockpit visuals, scenery, effects, audio, AI opponents, and HUD.
+This project was created through an AI-assisted iterative coding workflow with Adrian Hensler, using the pi coding-agent environment. It began as a single-file Three.js browser prototype, then was refactored into a modular Vite project with separate systems for rendering, input, tracks, vehicle physics, cockpit visuals, scenery, effects, audio, AI opponents, and HUD.
 
 The current version is still an early prototype. The next design focus is tuning the crash/grip model so reckless speed is punished without making normal driving feel unfair.
 
