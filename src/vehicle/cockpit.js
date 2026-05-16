@@ -109,32 +109,26 @@ export class Cockpit {
     leverR.rotation.y = 0.45;
 
     const wsShape = new THREE.Shape();
-    wsShape.moveTo(-1.42, 0);
-    wsShape.bezierCurveTo(-1.32, 0.65, -0.82, 1.22, 0, 1.42);
-    wsShape.bezierCurveTo(0.82, 1.22, 1.32, 0.65, 1.42, 0);
-    wsShape.lineTo(1.05, -0.13);
-    wsShape.quadraticCurveTo(0, -0.26, -1.05, -0.13);
-    wsShape.lineTo(-1.42, 0);
-    this.windscreen = mesh(new THREE.ShapeGeometry(wsShape, 32), materials.glass, this.group, false, false);
-    this.windscreen.position.set(0, 0.42, -1.02);
-    this.windscreen.rotation.x = -0.23;
-    const rimTop = box([2.15, 0.055, 0.055], materials.white, this.group);
-    rimTop.position.set(0, 1.55, -1.08);
-    rimTop.rotation.x = -0.23;
-    const rimL = box([0.06, 1.15, 0.055], materials.white, this.group);
-    const rimR = box([0.06, 1.15, 0.055], materials.white, this.group);
-    rimL.position.set(-1.28, 0.82, -1.04);
-    rimR.position.set(1.28, 0.82, -1.04);
-    rimL.rotation.z = -0.25;
-    rimR.rotation.z = 0.25;
-    rimL.rotation.x = rimR.rotation.x = -0.23;
+    wsShape.moveTo(-1.34, -0.12);
+    wsShape.bezierCurveTo(-1.2, 0.48, -0.72, 1.02, 0, 1.18);
+    wsShape.bezierCurveTo(0.72, 1.02, 1.2, 0.48, 1.34, -0.12);
+    wsShape.quadraticCurveTo(0.68, -0.28, 0, -0.24);
+    wsShape.quadraticCurveTo(-0.68, -0.28, -1.34, -0.12);
+    const windscreenMaterial = materials.glass.clone();
+    windscreenMaterial.opacity = 0.1;
+    this.windscreen = mesh(new THREE.ShapeGeometry(wsShape, 32), windscreenMaterial, this.group, false, false);
+    this.windscreen.position.set(0, 0.34, -1.05);
+    this.windscreen.rotation.x = -0.2;
+    const lowerFrame = box([1.7, 0.055, 0.07], materials.black, this.group);
+    lowerFrame.position.set(0, 0.28, -1.0);
+    lowerFrame.rotation.x = -0.2;
   }
 
   update({ steer, shake, speed, time }) {
     this.group.rotation.z = -steer * 0.58 + Math.sin(time * 13) * shake;
     this.group.rotation.x = -Math.abs(steer) * 0.045 + Math.sin(time * 17) * shake * 0.28;
     this.handlebar.rotation.z = -steer * 0.18;
-    this.windscreen.material.opacity = 0.18 + speed / 1100;
+    this.windscreen.material.opacity = Math.min(0.22, 0.09 + speed / 1800);
     this.gauge.scale.x = 0.75 + speed / 210;
   }
 }

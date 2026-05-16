@@ -1,0 +1,83 @@
+export const RACE_TUNING = {
+  totalLaps: 3,
+  countdownSeconds: 3,
+};
+
+export const BIKE_TUNING = {
+  acceleration: {
+    throttle: 88,
+    brake: 164,
+    coastDrag: 30,
+    uphillPenalty: 42,
+    downhillAssist: 16,
+    boost: 178,
+    boostDrain: 0.36,
+    boostRegen: 0.17,
+    maxSpeed: 178,
+    boostMaxSpeed: 236,
+  },
+  steering: {
+    response: 8.8,
+    lateralBase: 1.85,
+    lateralSpeedDivisor: 50,
+    lateralClamp: 10.5,
+  },
+  grip: {
+    curveLookAhead: 24,
+    curveLookBehind: 12,
+    curveSampleSpan: 36,
+    driftLookAhead: 15,
+    driftLookBehind: 15,
+    driftSampleSpan: 30,
+    safeSpeedBase: 196,
+    curvePenalty: 108,
+    steerPenalty: 32,
+    overspeedDivisor: 62,
+    hardSteerStart: 0.44,
+    hardSteerSpeedStart: 82,
+    hardSteerDivisor: 88,
+    brakeStability: 0.18,
+    gripLossScale: 1.85,
+    curveDriftScale: 0.22,
+    riskSlip: 0.74,
+    riskOffRoad: 0.24,
+    riskBoost: 0.08,
+  },
+  offRoad: {
+    roadEdgeRatio: 0.48,
+    slowdown: 82,
+    slowdownPerMeter: 58,
+    slipStart: 2.35,
+    slipSpeed: 72,
+    slipPerMeter: 0.18,
+  },
+  crash: {
+    duration: 1.35,
+    flashDecay: 1.8,
+    speedRetained: 0.18,
+    steerRetained: 0.35,
+    recoverySpeed: 28,
+    decel: 92,
+    riskThreshold: 1.08,
+    riskSpeed: 108,
+    offRoadThreshold: 4.05,
+    offRoadSpeed: 66,
+  },
+  collision: {
+    speedLossPerSecond: 88,
+    riskAdd: 0.18,
+    crashSeverity: 0.72,
+    crashSpeed: 78,
+  },
+  progress: {
+    speedScale: 0.74,
+  },
+};
+
+export const OPPONENT_TUNING = {
+  progressScale: 0.17,
+  visibleBehind: -25,
+  visibleAhead: 250,
+  hitLength: 5,
+  hitWidth: 1.3,
+};

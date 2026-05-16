@@ -74,6 +74,35 @@ Until crash/grip tuning has been tested by feel, those are likely distractions.
 
 ## Session log
 
+### 2026-05-15 — Playable pitch race-loop slice
+
+Changed:
+
+- Pinned Vite, Three, and SSL plugin dependency versions.
+- Added `npm run smoke` and `npm run check`.
+- Added race/session state for countdown, active racing, finish, lap timing, best lap, and restart.
+- Added named tuning constants for bike feel, collision behavior, race length, and opponent contact.
+- Reworked bike physics toward risky-simcade handling with clearer braking, grip, off-road, crash, and time-based collision behavior.
+- Added HUD readouts for lap time, best lap, position-ish, race countdown/finish, and risk state.
+- Simplified cockpit windscreen framing and fixed the deprecated Three shadow-map setting.
+
+Validated:
+
+- `npm run check` succeeds.
+- Smoke test covers countdown hold, race finish, soft collision slowdown, and severe impact crash.
+- Production build succeeds; Vite still reports the expected large Three.js chunk warning.
+
+Open issue:
+
+- Browser screenshot capture from Codex is intermittent on this WebGL page, so final visual tuning still needs hands-on play feel.
+- Physics numbers are now centralized, but they still need real-time tuning by feel.
+
+Next best action:
+
+```text
+Play the first track for 5 minutes, then tune `src/tuning.js` values in small steps until braking, grip warning, and crash fairness feel pitch-ready.
+```
+
 ### 2026-05-10 — Dash monitoring baseline
 
 Changed:

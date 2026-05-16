@@ -2,12 +2,15 @@ export class InputController {
   constructor() {
     this.keys = new Set();
     this.trackSwitchRequested = null;
+    this.restartRequested = false;
 
     window.addEventListener('keydown', event => {
       this.keys.add(event.code);
       if (event.code === 'Digit1') this.trackSwitchRequested = 0;
       if (event.code === 'Digit2') this.trackSwitchRequested = 1;
+      if (event.code === 'KeyR' || event.code === 'Enter') this.restartRequested = true;
       if (event.code === 'Space') event.preventDefault();
+      if (event.code === 'Enter') event.preventDefault();
     });
 
     window.addEventListener('keyup', event => this.keys.delete(event.code));
@@ -16,6 +19,12 @@ export class InputController {
   consumeTrackSwitch() {
     const requested = this.trackSwitchRequested;
     this.trackSwitchRequested = null;
+    return requested;
+  }
+
+  consumeRestart() {
+    const requested = this.restartRequested;
+    this.restartRequested = false;
     return requested;
   }
 

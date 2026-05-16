@@ -54,8 +54,15 @@ Build:
 npm run build
 ```
 
+Check:
+
+```bash
+npm run check
+```
+
 Validation so far:
 - `npm install` succeeds.
+- `npm run check` succeeds.
 - `npm run build` succeeds.
 - Bundle-size warning is expected because Three.js is included.
 
@@ -71,6 +78,8 @@ Validation so far:
 - Basic opponents
 - Speed effects and dust
 - HUD, boost bar, tach bars, lap/elevation display
+- Countdown start, lap timer, best lap, finish state, and restart flow
+- Position-ish readout against the current opponent pack
 - Cockpit lean
 - Crash/recovery state
 - Grip-risk model
@@ -97,6 +106,8 @@ Validation so far:
 src/
   main.js
   game.js
+  raceSession.js
+  tuning.js
   renderer.js
   input.js
   materials.js
@@ -204,18 +215,21 @@ Future better audio ideas:
 
 ### Game Loop
 
-Missing:
+Now present:
 - countdown start
 - lap timer
 - best lap
 - finish screen
 - restart flow
+- position-ish HUD readout
+
+Still missing:
 - track select screen
-- race position
+- real race position based on completed opponent laps
 
 ## Immediate Next Step
 
-Tune the crash/grip model by feel.
+Tune the centralized risky-simcade feel values in `src/tuning.js` by feel.
 
 Recommended checks:
 - Holding throttle through curves should become risky, not always safe.

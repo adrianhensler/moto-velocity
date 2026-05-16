@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { OPPONENT_TUNING } from '../tuning.js';
 
 function mesh(geometry, material, parent, cast = true, receive = true) {
   const object = new THREE.Mesh(geometry, material);
@@ -37,37 +38,60 @@ export class OpponentManager {
     this.scene = scene;
     this.trackSystem = trackSystem;
     this.getLocalPoint = getLocalPoint;
-    this.opponents = [
-      { group: createOpponentBike(materials, materials.cyan), progress: 95, lane: -1.5, speed: 112 },
-      { group: createOpponentBike(materials, materials.yellow), progress: 170, lane: 1.2, speed: 126 },
-      { group: createOpponentBike(materials, materials.orange), progress: 260, lane: 0.2, speed: 118 },
+    this.startingGrid = [
+      { progress: 95, lane: -1.5, speed: 112, material: materials.cyan },
+      { progress: 170, lane: 1.2, speed: 126, material: materials.yellow },
+      { progress: 260, lane: 0.2, speed: 118, material: materials.orange },
     ];
+    this.opponents = this.startingGrid.map(spec => ({
+      group: createOpponentBike(materials, spec.material),
+      progress: spec.progress,
+      lane: spec.lane,
+      speed: spec.speed,
+    }));
     this.opponents.forEach(opponent => scene.add(opponent.group));
   }
 
-  update(dt, bike) {
-    let collisionSlowdown = 0;
+  reset() {
+    this.opponents.forEach((opponent, index) => {
+      const spec = this.startingGrid[index];
+      opponent.progress = spec.progress;
+      opponent.lane = spec.lane;
+      opponent.speed = spec.speed;
+    });
+  }
+
+  update(dt, bike, { active = true } = {}) {
     let collisionSeverity = 0;
     for (const opponent of this.opponents) {
-      opponent.progress = (opponent.progress + opponent.speed * 0.17 * dt) % this.trackSystem.activeTrack.length;
+      if (active) {
+        opponent.progress = (opponent.progress + opponent.speed * OPPONENT_TUNING.progressScale * dt) % this.trackSystem.activeTrack.length;
+      }
       let offset = opponent.progress - bike.progress;
       if (offset < -this.trackSystem.activeTrack.length / 2) offset += this.trackSystem.activeTrack.length;
       if (offset > this.trackSystem.activeTrack.length / 2) offset -= this.trackSystem.activeTrack.length;
 
       const point = this.getLocalPoint(bike.progress, offset, bike.lateral - opponent.lane, 0.25);
-      opponent.group.visible = offset > -25 && offset < 250;
+      opponent.group.visible = offset > OPPONENT_TUNING.visibleBehind && offset < OPPONENT_TUNING.visibleAhead;
       opponent.group.position.set(point.x, point.y, point.z);
       opponent.group.rotation.x = -Math.atan(this.trackSystem.tangentAt(bike.progress + offset).dy) * 0.45;
       opponent.group.rotation.z = Math.sin((bike.progress + offset) * 0.045) * 0.18;
 
-      const longitudinalHit = Math.max(0, 1 - Math.abs(offset) / 5);
-      const lateralHit = Math.max(0, 1 - Math.abs(bike.lateral - opponent.lane) / 1.3);
+      const longitudinalHit = Math.max(0, 1 - Math.abs(offset) / OPPONENT_TUNING.hitLength);
+      const lateralHit = Math.max(0, 1 - Math.abs(bike.lateral - opponent.lane) / OPPONENT_TUNING.hitWidth);
       const hit = longitudinalHit * lateralHit;
-      if (hit > 0) {
-        collisionSlowdown += 75 * dt * hit;
-        collisionSeverity = Math.max(collisionSeverity, hit);
-      }
+      if (active && hit > 0) collisionSeverity = Math.max(collisionSeverity, hit);
     }
-    return { slowdown: collisionSlowdown, severity: collisionSeverity };
+    return { severity: collisionSeverity };
+  }
+
+  positionFor(bike) {
+    const ahead = this.opponents.filter(opponent => {
+      let offset = opponent.progress - bike.progress;
+      if (offset < -this.trackSystem.activeTrack.length / 2) offset += this.trackSystem.activeTrack.length;
+      if (offset > this.trackSystem.activeTrack.length / 2) offset -= this.trackSystem.activeTrack.length;
+      return offset > 0;
+    }).length;
+    return `${ahead + 1}/${this.opponents.length + 1}`;
   }
 }
