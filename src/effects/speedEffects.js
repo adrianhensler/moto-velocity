@@ -36,10 +36,10 @@ export class SpeedEffects {
   }
 
   update({ dt, speed, steer, boosting, risk = 0, offRoad = 0, crashed = false }) {
-    const travel = (speed * 0.82 + 28) * dt;
+    const travel = speed * 0.82 * dt;
     const speedFx = THREE.MathUtils.smoothstep(speed, 95, boosting ? 160 : 190);
     const dangerFx = THREE.MathUtils.clamp(risk, 0, 1);
-    const dustFx = THREE.MathUtils.clamp(THREE.MathUtils.smoothstep(speed, 55, 175) + offRoad * 0.18 + dangerFx * 0.35, 0, 1);
+    const dustFx = THREE.MathUtils.clamp(THREE.MathUtils.smoothstep(speed, 45, 170) + offRoad * 0.2 + dangerFx * 0.42, 0, 1);
 
     for (const streak of this.streaks) {
       streak.position.z += travel * (4.4 + speed / 70);
@@ -61,7 +61,7 @@ export class SpeedEffects {
       }
     }
 
-    const skidFx = THREE.MathUtils.clamp((risk - 0.45) * 1.6 + offRoad * 0.12 + (crashed ? 0.8 : 0), 0, 1);
+    const skidFx = THREE.MathUtils.clamp((risk - 0.38) * 1.85 + offRoad * 0.14 + (crashed ? 0.8 : 0), 0, 1);
     for (const skid of this.skidDust) {
       skid.position.z += travel * (2.8 + speed / 90);
       skid.position.x += steer * 0.05 * speed;
